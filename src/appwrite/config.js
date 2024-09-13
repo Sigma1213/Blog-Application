@@ -117,11 +117,19 @@ export class Service{
         }
     }
 
-    getFilePreview(fileId){
-        return this.bucket.getFilePreview(
-            conf.appwriteBucketId,
-            fileId
-        )
+    getFilePreview(fileId) {
+        if (!fileId) {
+            throw new Error('fileId is required for getFilePreview');
+        }
+        try {
+            return this.bucket.getFilePreview(
+                conf.appwriteBucketId,
+                fileId
+            );
+        } catch (error) {
+            console.error('Error getting file preview:', error);
+            throw new Error('Failed to get file preview: ' + error.message);
+        }
     }
 }
 
